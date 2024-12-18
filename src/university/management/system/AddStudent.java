@@ -209,6 +209,8 @@ import java.awt.event.*;
 import com.toedter.calendar.JDateChooser;
 import java.sql.*; // Import for database operations
 import java.util.Random;
+import java.text.SimpleDateFormat;
+
 
 public class AddStudent extends JFrame implements ActionListener {
     JTextField tfname, tffname, tfaddress, tfphone, tfemail, tfx, tfxii, tfaadhar;
@@ -355,50 +357,55 @@ public class AddStudent extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
     if (ae.getSource() == submit) {
-        String name = tfname.getText();
-        String fname = tffname.getText();
-        String rollno = labelrollno.getText();
-        String dob = ((JTextField) dcdob.getDateEditor().getUiComponent()).getText();
-        String address = tfaddress.getText();
-        String phone = tfphone.getText();
-        String email = tfemail.getText();
-        String classX = tfx.getText();
-        String classXII = tfxii.getText();
-        String aadhar = tfaadhar.getText();
-        String course = (String) cbcourse.getSelectedItem();
-        String branch = (String) cbbranch.getSelectedItem();
-
-        try {
-            // Updated SQL query to match the student table structure
-            String query = "INSERT INTO student (name, fname, rollno, dob, address, phone, email, class_x, class_xii, aadhar, course, branch) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            Conn con = new Conn();
-            PreparedStatement pstmt = con.con.prepareStatement(query);
-
-            // Set parameters for PreparedStatement
-            pstmt.setString(1, name.isEmpty() ? null : name);
-            pstmt.setString(2, fname.isEmpty() ? null : fname);
-            pstmt.setString(3, rollno);
-            pstmt.setString(4, dob.isEmpty() ? null : dob); // Handles date as a string (ensure format matches database expectations)
-            pstmt.setString(5, address.isEmpty() ? null : address);
-            pstmt.setString(6, phone.isEmpty() ? null : phone);
-            pstmt.setString(7, email.isEmpty() ? null : email);
-            pstmt.setFloat(8, classX.isEmpty() ? 0 : Float.parseFloat(classX)); // Handle `class_x` as float
-            pstmt.setFloat(9, classXII.isEmpty() ? 0 : Float.parseFloat(classXII)); // Handle `class_xii` as float
-            pstmt.setString(10, aadhar.isEmpty() ? null : aadhar);
-            pstmt.setString(11, course);
-            pstmt.setString(12, branch);
-
-            // Execute the query
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Student details added successfully");
-            setVisible(false);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-        }
-    } else if (ae.getSource() == cancel) {
-        setVisible(false);
+    String name = tfname.getText();
+    String fname = tffname.getText();
+    String rollno = labelrollno.getText();
+    String dob = null;
+    if (dcdob.getDate() != null) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dob = sdf.format(dcdob.getDate());
     }
+    String address = tfaddress.getText();
+    String phone = tfphone.getText();
+    String email = tfemail.getText();
+    String classX = tfx.getText();
+    String classXII = tfxii.getText();
+    String aadhar = tfaadhar.getText();
+    String course = (String) cbcourse.getSelectedItem();
+    String branch = (String) cbbranch.getSelectedItem();
+
+    try {
+        // Updated SQL query to match the student table structure
+        String query = "INSERT INTO student (name, fname, rollno, dob, address, phone, email, class_x, class_xii, aadhar, course, branch) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Conn con = new Conn();
+        PreparedStatement pstmt = con.con.prepareStatement(query);
+
+        // Set parameters for PreparedStatement
+        pstmt.setString(1, name.isEmpty() ? null : name);
+        pstmt.setString(2, fname.isEmpty() ? null : fname);
+        pstmt.setString(3, rollno);
+        pstmt.setString(4, dob); // Ensure date is properly formatted
+        pstmt.setString(5, address.isEmpty() ? null : address);
+        pstmt.setString(6, phone.isEmpty() ? null : phone);
+        pstmt.setString(7, email.isEmpty() ? null : email);
+        pstmt.setFloat(8, classX.isEmpty() ? 0 : Float.parseFloat(classX)); // Handle `class_x` as float
+        pstmt.setFloat(9, classXII.isEmpty() ? 0 : Float.parseFloat(classXII)); // Handle `class_xii` as float
+        pstmt.setString(10, aadhar.isEmpty() ? null : aadhar);
+        pstmt.setString(11, course);
+        pstmt.setString(12, branch);
+
+        // Execute the query
+        pstmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Student details added successfully");
+        setVisible(false);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    }
+} else if (ae.getSource() == cancel) {
+    setVisible(false);
+}
+
 }
 
 

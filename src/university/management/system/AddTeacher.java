@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import com.toedter.calendar.JDateChooser;
-import java.sql.*; // Import for database operations
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 public class AddTeacher extends JFrame implements ActionListener {
@@ -151,53 +152,53 @@ public class AddTeacher extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-    if (ae.getSource() == submit) {
-        String name = tfname.getText();
-        String fname = tffname.getText();
-        String empid = labelempid.getText();
-        String dob = ((JTextField) dcdob.getDateEditor().getUiComponent()).getText();
-        String address = tfaddress.getText();
-        String phone = tfphone.getText();
-        String email = tfemail.getText();
-        String classX = tfx.getText();
-        String classXII = tfxii.getText();
-        String aadhar = tfaadhar.getText();
-        String education = (String) cbcourse.getSelectedItem();
-        String department = (String) cbbranch.getSelectedItem();
+        if (ae.getSource() == submit) {
+            String name = tfname.getText();
+            String fname = tffname.getText();
+            String empid = labelempid.getText();
+            String dob = null;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                dob = sdf.format(dcdob.getDate());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Invalid date format!");
+                return;
+            }
+            String address = tfaddress.getText();
+            String phone = tfphone.getText();
+            String email = tfemail.getText();
+            String classX = tfx.getText();
+            String classXII = tfxii.getText();
+            String aadhar = tfaadhar.getText();
+            String education = (String) cbcourse.getSelectedItem();
+            String department = (String) cbbranch.getSelectedItem();
 
-        try {
-            // Updated SQL query to match the student table structure
-            String query = "INSERT INTO teacher (name, fname, empid, dob, address, phone, email, class_x, class_xii, aadhar, education, department) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            Conn con = new Conn();
-            PreparedStatement pstmt = con.con.prepareStatement(query);
-
-            // Set parameters for PreparedStatement
-            pstmt.setString(1, name.isEmpty() ? null : name);
-            pstmt.setString(2, fname.isEmpty() ? null : fname);
-            pstmt.setString(3, empid);
-            pstmt.setString(4, dob.isEmpty() ? null : dob); // Handles date as a string (ensure format matches database expectations)
-            pstmt.setString(5, address.isEmpty() ? null : address);
-            pstmt.setString(6, phone.isEmpty() ? null : phone);
-            pstmt.setString(7, email.isEmpty() ? null : email);
-            pstmt.setFloat(8, classX.isEmpty() ? 0 : Float.parseFloat(classX)); // Handle `class_x` as float
-            pstmt.setFloat(9, classXII.isEmpty() ? 0 : Float.parseFloat(classXII)); // Handle `class_xii` as float
-            pstmt.setString(10, aadhar.isEmpty() ? null : aadhar);
-            pstmt.setString(11, education);
-            pstmt.setString(12, department);
-
-            // Execute the query
-            pstmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Teacher details added successfully");
+            try {
+                String query = "INSERT INTO teacher (name, fname, empid, dob, address, phone, email, class_x, class_xii, aadhar, education, department) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                Conn con = new Conn();
+                PreparedStatement pstmt = con.con.prepareStatement(query);
+                pstmt.setString(1, name);
+                pstmt.setString(2, fname);
+                pstmt.setString(3, empid);
+                pstmt.setString(4, dob);
+                pstmt.setString(5, address);
+                pstmt.setString(6, phone);
+                pstmt.setString(7, email);
+                pstmt.setFloat(8, Float.parseFloat(classX));
+                pstmt.setFloat(9, Float.parseFloat(classXII));
+                pstmt.setString(10, aadhar);
+                pstmt.setString(11, education);
+                pstmt.setString(12, department);
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Teacher details added successfully");
+                setVisible(false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            }
+        } else if (ae.getSource() == cancel) {
             setVisible(false);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }
-    } else if (ae.getSource() == cancel) {
-        setVisible(false);
     }
-}
-
 
     public static void main(String[] args) {
         new AddTeacher();

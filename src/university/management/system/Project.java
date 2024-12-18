@@ -361,7 +361,7 @@ public class Project extends JFrame implements ActionListener {
         // Add menus
         addMenu(mb, "New Information", new String[]{"New Faculty Information", "New Student Information"});
         addMenu(mb, "View Details", new String[]{"View Faculty Details", "View Student Details"});
-        addMenu(mb, "Leave Application", new String[]{"Faculty Leave", "Student Leave"});
+        addMenu(mb, "Apply Leave", new String[]{"Faculty Leave", "Student Leave"});
         addMenu(mb, "Leave Details", new String[]{"Faculty Leave Details", "Student Leave Details"});
         addMenu(mb, "Examination", new String[]{"Examination Details", "Enter Marks"});
         addMenu(mb, "Update Details", new String[]{"Update Faculty Information", "Update Student Information"});
@@ -415,13 +415,11 @@ public class Project extends JFrame implements ActionListener {
         menu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding for clean appearance
 
         // Add Exit menu item
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.setBackground(Color.WHITE);
-        exitItem.setFont(new Font("Arial", Font.PLAIN, 18)); // Dropdown item font size
-        exitItem.addActionListener(this);
-        menu.add(exitItem);
-
-        mb.add(menu);
+        
+        
+         
+        
+        
     }
 
     @Override
@@ -447,10 +445,29 @@ public class Project extends JFrame implements ActionListener {
         } else if (msg.equals("New Student Information")) {
             new AddStudent(); // Open the AddStudent form
         } else if (msg.equals("View Faculty Details")) {
-            new TeacherDetails(); // Open the AddTeacher form for viewing faculty details
+            new TeacherDetails(); // Open the TeacherDetails form for viewing faculty details
         } else if (msg.equals("View Student Details")) {
-            new StudentDetails(); // Open the AddStudent form for viewing student details
+            new StudentDetails(); // Open the StudentDetails form for viewing student details
+        } else if (msg.equals("Student Leave")) {
+            new StudentLeave(); // Open the StudentLeave form
+        } else if (msg.equals("Faculty Leave")) {
+            new TeacherLeave(); // Open the TeacherLeave form
+        } else if (msg.equals("Student Leave Details")) {
+            new StudentLeaveDetails(); // Open the StudentLeaveDetails form
+        } else if (msg.equals("Faculty Leave Details")) {
+            new TeacherLeaveDetails(); // Open the TeacherLeaveDetails form
+        }else if (msg.equals("Update Faculty Information")) {
+            new UpdateTeacher(); // Open the TeacherLeaveDetails form
+        }else if (msg.equals("Update Student Information")) {
+            new UpdateStudent(); // Open the TeacherLeaveDetails form
+        }else if (msg.equals("Fees Structure")) {
+            new FeeStructure(); // Open the TeacherLeaveDetails form
+        }else if (msg.equals("Enter Marks")) {
+            new EnterMarks(); // Open the TeacherLeaveDetails form
+        }else if (msg.equals("Examination Details")) {
+            new ExaminationDetails(); // Open the TeacherLeaveDetails form
         }
+        
     }
 
     public static void main(String[] args) {

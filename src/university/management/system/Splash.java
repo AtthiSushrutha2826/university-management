@@ -35,7 +35,7 @@ public class Splash extends JFrame implements Runnable { // Class for splash scr
 
     public void run() {
         try {
-            Thread.sleep(7000); // Keep the splash screen visible for 7 seconds smooth transition slowly 
+            Thread.sleep(2000); // Keep the splash screen visible for 7 seconds smooth transition slowly 
             setVisible(false); // Hide the JFrame after the delay
             
             
